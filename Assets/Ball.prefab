@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 61b2cbcbc7214c04cbd8532e98166027, type: 2}
+  - {fileID: 2100000, guid: 8059fe61d5ebd844a90dcb24d96db4fc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,7 +146,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84936f0c2662f324f9c7f75e89020a52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDelay: 2
-  obstacleLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  levelManager: {fileID: 0}

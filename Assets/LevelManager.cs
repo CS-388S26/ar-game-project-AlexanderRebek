@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using UnityEngine;
-
 public class LevelManager : MonoBehaviour
 {
     public Transform completeCourse;
@@ -20,7 +18,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    // Called when the tracker is detected
+    // Called when the tracker/floor is detected
     public void SetCompleteCourse(Transform courseParent)
     {
         completeCourse = courseParent;
@@ -49,7 +47,6 @@ public class LevelManager : MonoBehaviour
         if (currentLevel < totalLevels)
             completeCourse.GetChild(currentLevel).gameObject.SetActive(false);
 
-        // Next
         currentLevel++;
 
         if (currentLevel < totalLevels)

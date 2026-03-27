@@ -27,12 +27,12 @@ public class BallLauncher : MonoBehaviour
 
     void Update()
     {
-        // Touch input
+        // touch input
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             LaunchBall(Input.GetTouch(0).position);
         }
-        // Mouse input
+        // mouse input for debug
         else if (Input.GetMouseButtonDown(0))
         {
             LaunchBall(Input.mousePosition);
@@ -41,7 +41,7 @@ public class BallLauncher : MonoBehaviour
 
     private void LaunchBall(Vector2 screenPos)
     {
-        // 1. Spawn ball slightly in front of camera
+        // spawn ball in desired position
         Vector3 spawnPos = arCamera.position + arCamera.forward * spawnOffsetZ + arCamera.up * spawnOffsetY;
         GameObject ball = Instantiate(ballPrefab, spawnPos, Quaternion.identity);
         ball.GetComponent<BallLogic>().levelManager = levelManager;
@@ -53,18 +53,17 @@ public class BallLauncher : MonoBehaviour
             return;
         }
 
-        // 2. Determine direction from camera to a point in front of camera based on tap
+        // determine direction based on tap
         Ray ray = mainCam.ScreenPointToRay(screenPos);
 
-        // Project the ray forward at a reasonable distance (1–5 meters)
-        float targetDistance = 2f; // you can tweak this
+        // project ray forward at set distance
+        float targetDistance = 2f;
         Vector3 targetPoint = ray.GetPoint(targetDistance);
 
-        // 3. Compute direction vector and apply upward force
+        // compute direction vector and apply upward force
         Vector3 direction = (targetPoint - spawnPos).normalized;
         Vector3 launchVelocity = direction * launchSpeed + Vector3.up * upwardForce;
 
-        // 4. Apply velocity
         rb.velocity = launchVelocity;
     }
 }

@@ -6,48 +6,47 @@ using Vuforia;
 
 public class SingleCoursePlacer : MonoBehaviour
 {
-    public GameObject golfCoursePrefab;
+    public GameObject coursePrefab; // prefab containing all courses as children
     private GameObject currentCourse;
 
-    public GameObject ballPrefab;
-    private GameObject currentBall;
+    public LevelManager levelManager;
 
     private PlaneFinderBehaviour planeFinder;
+
+    private bool hasSpawned = false;
 
     void Start()
     {
         planeFinder = GetComponent<PlaneFinderBehaviour>();
         if (planeFinder != null)
         {
-            // Subscribe correctly using a delegate
             planeFinder.OnInteractiveHitTest.AddListener(OnPlaneHit);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("PlaneFinderBehaviour not found!");
         }
     }
 
+    // when floor is detected and pressed
     private void OnPlaneHit(HitTestResult result)
     {
-        // Prevent placing multiple courses
-        if (currentCourse != null) return;
+        if (hasSpawned) return;
 
-        // Instantiate the golf course at detected plane
-        currentCourse = Instantiate(golfCoursePrefab, result.Position, result.Rotation);
+        currentCourse = Instantiate(coursePrefab, result.Position, result.Rotation);
 
-        // Try to find the BallStartPoint inside the spawned course
-        Transform ballStart = currentCourse.transform.Find("BallStartPoint");
-
-        if (ballStart != null)
+        if (levelManager != null)
         {
-            if (ballPrefab != null)
-            {
-                currentBall = Instantiate(ballPrefab, ballStart.position, Quaternion.identity);
-            }
+            levelManager.SetCompleteCourse(currentCourse.transform);
         }
 
-        // Disable Plane Finder so no more placements happen
+        // disable planefinder
         if (planeFinder != null)
         {
             planeFinder.enabled = false;
             planeFinder.gameObject.SetActive(false);
         }
+
+        hasSpawned = true;
     }
 }

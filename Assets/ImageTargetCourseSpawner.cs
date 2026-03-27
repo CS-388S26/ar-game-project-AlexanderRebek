@@ -7,13 +7,13 @@ using Vuforia;
 
 public class ImageTargetCourseSpawner : MonoBehaviour
 {
-    public GameObject golfCoursePrefab; // Prefab containing all courses as children
+    public GameObject golfCoursePrefab; // prefab containing all courses as children
     private GameObject currentCourse;
 
     private ObserverBehaviour observerBehaviour;
     private bool hasSpawned = false;
 
-    public LevelManager levelManager; // assign in inspector
+    public LevelManager levelManager;
 
     void Start()
     {
@@ -29,6 +29,7 @@ public class ImageTargetCourseSpawner : MonoBehaviour
         }
     }
 
+    //when tracker is detected
     private void OnTargetStatusChanged(ObserverBehaviour behaviour, TargetStatus status)
     {
         if (!hasSpawned &&
@@ -47,13 +48,12 @@ public class ImageTargetCourseSpawner : MonoBehaviour
             return;
         }
 
-        // Spawn course as child of image target
+        // spawn course as child of image target
         currentCourse = Instantiate(golfCoursePrefab, transform);
         currentCourse.transform.localPosition = new Vector3(0f, -0.2f, 0f);
         currentCourse.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         currentCourse.transform.localRotation = Quaternion.identity;
 
-        // --- Integrate LevelManager ---
         if (levelManager != null)
         {
             levelManager.SetCompleteCourse(currentCourse.transform);
