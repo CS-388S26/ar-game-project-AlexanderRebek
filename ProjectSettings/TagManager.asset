@@ -3,12 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ball
+  - Coin
+  - Obstacle
+  - Win
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - ObstacleLayer
   - Water
   - UI
   - 

@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using Vuforia;
 
 public class SingleCoursePlacer : MonoBehaviour
 {
-    public GameObject golfCoursePrefab; // assign your golf course prefab
+    public GameObject golfCoursePrefab;
     private GameObject currentCourse;
+
+    public GameObject ballPrefab;
+    private GameObject currentBall;
 
     private PlaneFinderBehaviour planeFinder;
 
@@ -22,12 +26,26 @@ public class SingleCoursePlacer : MonoBehaviour
 
     private void OnPlaneHit(HitTestResult result)
     {
-        // Only place one course
-        if (currentCourse == null && golfCoursePrefab != null)
-        {
-            currentCourse = Instantiate(golfCoursePrefab, result.Position, result.Rotation);
+        // Prevent placing multiple courses
+        if (currentCourse != null) return;
 
-            // Disable Plane Finder so no more courses can be placed
+        // Instantiate the golf course at detected plane
+        currentCourse = Instantiate(golfCoursePrefab, result.Position, result.Rotation);
+
+        // Try to find the BallStartPoint inside the spawned course
+        Transform ballStart = currentCourse.transform.Find("BallStartPoint");
+
+        if (ballStart != null)
+        {
+            if (ballPrefab != null)
+            {
+                currentBall = Instantiate(ballPrefab, ballStart.position, Quaternion.identity);
+            }
+        }
+
+        // Disable Plane Finder so no more placements happen
+        if (planeFinder != null)
+        {
             planeFinder.enabled = false;
             planeFinder.gameObject.SetActive(false);
         }
